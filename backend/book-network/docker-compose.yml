@@ -1,0 +1,35 @@
+services:
+  # Serviço do banco de dados PostgreSQL
+  postgres:
+    container_name: postgres-sql-bsn  # Nome do contêiner Docker
+    image: postgres  # Imagem oficial do PostgreSQL
+    environment:
+      POSTGRES_USER: username  # Nome do usuário do banco
+      POSTGRES_PASSWORD: password  # Senha do banco
+      PGDATA: /var/lib/postgres/data  # Caminho onde os dados serão armazenados dentro do contêiner
+      POSTGRES_DB: book_social_network  # Nome do banco de dados a ser criado
+    volumes:
+      - postgres:/data/postgres  # Volume para persistir os dados do banco, mesmo que o contêiner seja parado
+    ports:
+      - 5432:5432  # Porta de comunicação com o banco (padrão do PostgreSQL)
+    networks:
+      - spring-demo  # Rede interna para comunicação com outros serviços
+    restart: unless-stopped  # Reinicia o contêiner automaticamente, a não ser que ele seja parado manualmente
+
+  # Serviço de simulação de envio de e-mails (MailDev)
+  mail-dev:
+    container_name: mail-dev-bsn  # Nome do contêiner Docker
+    image: maildev/maildev  # Imagem do MailDev, usada para testes de e-mails
+    ports:
+      - 1080:1080  # Porta para acessar a interface web do MailDev (visualização de e-mails)
+      - 1025:1025  # Porta para envio de e-mails simulados (SMTP fake)
+
+# Definição da rede interna para que os serviços possam se comunicar
+networks:
+  spring-demo:
+    driver: bridge  # Tipo de rede utilizada (isolada entre serviços do Docker)
+
+# Volume persistente para armazenar os dados do banco PostgreSQL
+volumes:
+  postgres:
+    driver: local  # Volume local padrão do Docker
