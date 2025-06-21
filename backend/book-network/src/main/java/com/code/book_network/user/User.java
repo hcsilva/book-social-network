@@ -181,7 +181,7 @@ public class User implements UserDetails, Principal {
         this.lastModifiedDate = lastModifiedDate;
     }
 
-    private String fullName() {
+    public String fullName() {
         return firstname + " " + lastname;
     }
 }
