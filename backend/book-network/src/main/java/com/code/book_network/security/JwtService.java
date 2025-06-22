@@ -9,7 +9,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
-import java.security.Key;
 import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
@@ -41,11 +40,13 @@ public class JwtService {
                 .getPayload();
     }
 
-    public String generationToken(UserDetails userDetails) {
-        return generationToken(new HashMap<>(), userDetails);
+    //Verficar se pode excluir
+    //todo
+    public String generatedToken(UserDetails userDetails) {
+        return generatedToken(new HashMap<>(), userDetails);
     }
 
-    private String generationToken(Map<String, Object> claims, UserDetails userDetails) {
+    public String generatedToken(Map<String, Object> claims, UserDetails userDetails) {
         return buildToken(claims, userDetails, jwtExpiration);
     }
 
