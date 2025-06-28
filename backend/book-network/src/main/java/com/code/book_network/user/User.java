@@ -1,5 +1,7 @@
 package com.code.book_network.user;
 
+import com.code.book_network.book.Book;
+import com.code.book_network.feedback.Feedback;
 import com.code.book_network.role.Role;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -38,6 +40,12 @@ public class User implements UserDetails, Principal {
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles;
 
+    @OneToMany(mappedBy = "owner")
+    private List<Book> books;
+
+    @OneToMany(mappedBy = "user")
+    private List<Feedback> feedbacks;
+
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdDate;
@@ -46,7 +54,8 @@ public class User implements UserDetails, Principal {
     @Column(insertable = false)
     private LocalDateTime lastModifiedDate;
 
-    public User(Integer id, String firstname, String lastname, LocalDate dateOfBirth, String email, String password, boolean accountLocked, boolean enabled, List<Role> roles, LocalDateTime createdDate, LocalDateTime lastModifiedDate) {
+    public User(Integer id, String firstname, String lastname, LocalDate dateOfBirth, String email, String password, boolean accountLocked,
+                boolean enabled, List<Role> roles, List<Book> books, List<Feedback> feedbacks, LocalDateTime createdDate, LocalDateTime lastModifiedDate) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -56,11 +65,29 @@ public class User implements UserDetails, Principal {
         this.accountLocked = accountLocked;
         this.enabled = enabled;
         this.roles = roles;
+        this.books = books;
+        this.feedbacks = feedbacks;
         this.createdDate = createdDate;
         this.lastModifiedDate = lastModifiedDate;
     }
 
     public User() {
+    }
+
+    public List<Book> getBooks() {
+        return books;
+    }
+
+    public void setBooks(List<Book> books) {
+        this.books = books;
+    }
+
+    public List<Feedback> getFeedbacks() {
+        return feedbacks;
+    }
+
+    public void setFeedbacks(List<Feedback> feedbacks) {
+        this.feedbacks = feedbacks;
     }
 
     public Integer getId() {
