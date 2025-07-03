@@ -1,5 +1,6 @@
 package com.code.book_network.book;
 
+import com.code.book_network.file.FileUtils;
 import com.code.book_network.history.BookTransactionHistory;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +30,7 @@ public class BookMapper {
         bookResponse.setArchived(book.isArchived());
         bookResponse.setShareable(book.isShareable());
         bookResponse.setOwner(book.getOwner().fullName());
-        //bookResponse.setCover();
+        bookResponse.setCover(FileUtils.readFileFromLocation(book.getBookCover()));
 
         return bookResponse;
     }
