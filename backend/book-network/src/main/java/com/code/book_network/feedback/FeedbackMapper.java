@@ -1,11 +1,12 @@
 package com.code.book_network.feedback;
 
 import com.code.book_network.book.Book;
+import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
+@Service
 public class FeedbackMapper {
-
 
     public Feedback toFeedback(FeedbackRequest request, Book book) {
         Feedback feedback = new Feedback();
