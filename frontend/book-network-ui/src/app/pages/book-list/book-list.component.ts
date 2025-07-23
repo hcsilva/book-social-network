@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { BookService } from '../../services/services';
-import { PageResponseBookResponse } from '../../services/models';
+import { BookResponse, PageResponseBookResponse } from '../../services/models';
 import { BookCardComponent } from '../../modules/book/components/book-card/book-card.component';
 
 @Component({
@@ -12,7 +12,7 @@ import { BookCardComponent } from '../../modules/book/components/book-card/book-
   standalone: true,
   imports: [CommonModule, FormsModule, BookCardComponent],
   templateUrl: './book-list.component.html',
-  styleUrls: ['./book-list.component.scss'] 
+  styleUrls: ['./book-list.component.scss']
 })
 
 export class BookListComponent implements OnInit {
@@ -27,6 +27,8 @@ export class BookListComponent implements OnInit {
   page = 0;
   size = 5;
   pages: any = [];
+  message = '';
+  level: 'success' | 'error' = 'success';
 
   constructor(
     private readonly bookService: BookService,
@@ -79,5 +81,27 @@ export class BookListComponent implements OnInit {
 
   get isLastPage() {
     return this.page === this.bookResponse.totalPages as number - 1;
+  }
+
+  borrowBook(book: BookResponse) {
+    this.message = '';
+    this.level = 'success';
+    this.bookService.borrowBook({
+      'book-id': book.id as number
+    }).subscribe({
+      next: () => {
+        this.level = 'success';
+        this.message = 'Book successfully added to your list';
+      },
+      error: (err) => {
+        console.log(err);
+        this.level = 'error';
+        this.message = err.error.error;
+      }
+    });
+  }
+
+  displayBookDetails(book: BookResponse) {
+    this.router.navigate(['books', 'details', book.id]);
   }
 }
