@@ -197,8 +197,8 @@ public class BookService {
             throw new OperationNotPermittedException("the requested book cannot be borrowed since it is archived or not shareable");
         }
 
-        if (Objects.equals(book.getOwner().getId(), user.getId())) {
-            throw new OperationNotPermittedException("You cannot borrow or return your own book");
+        if (!Objects.equals(book.getOwner().getId(), user.getId())) {
+            throw new OperationNotPermittedException("You cannot return a book that you do not own");
         }
 
         BookTransactionHistory bookTransactionHistory = bookTransactionHistoryRepository.findByBookIdAndOwnerId(bookId, user.getId())
